@@ -1,0 +1,22 @@
+# https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
+name: HA Spawn Point the1710pack
+version: "2024.10.0"
+slug: ha-spawn-point-the1710pack
+description: Minecraft Server the1710pack Addon Java/Geyser/Floodgate Edition
+url: "https://github.com/aph-le/home-assistant-addons/tree/main/addon-ha-spawn-point-the1710pack"
+arch:
+  - amd64
+  - aarch64
+host_network: true
+init: false
+map:
+  - addons:rw
+options:
+  eula: true
+  motd: Spawn Point the1710pack Server
+  level_name: Spawn Point the1710pack
+schema:
+  eula: bool
+  motd: str
+  level_name: str
+image: "ghcr.io/aph-le/{arch}-addon-spawn-point-the1710pack"

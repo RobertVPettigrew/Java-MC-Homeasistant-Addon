@@ -59,7 +59,7 @@ Notes to developers after forking or using the github template feature:
 [i386-shield]: https://img.shields.io/badge/i386-yes-green?style=plastic
 
 #### References
-
+- Thanks to [aph-le](https://github.com/aph-le/home-assistant-addons) for the project to build off
 - Thanks to [itzg](https://github.com/itzg/docker-minecraft-bedrock-server) for the minecraft server docker image inspiration.
 - Thanks to [williamcorsel](https://github.com/williamcorsel/hassio-addons) for the home assistant minecraft addon inspiration.
 - Thanks to [TheRemote](https://github.com/TheRemote/Legendary-Java-Minecraft-Geyser-Floodgate) for the minecraft Java/Geyser/Floddgate inspiration.

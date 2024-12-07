@@ -1,0 +1,65 @@
+#!/usr/bin/with-contenv bashio
+# shellcheck shell=bash
+
+# ==============================================================================
+# Configure andStart the example service
+# s6-overlay docs: https://github.com/just-containers/s6-overlay
+# ==============================================================================
+
+# Add your code here
+
+# Declare variables
+MINECRAFT_DIR=/data/minecraft
+
+# Stores the location of this library
+__HASP_LIB_DIR=$(dirname "${BASH_SOURCE[0]}")
+readonly __HASP_LIB_DIR
+
+# shellcheck disable=SC1091
+source "${__HASP_LIB_DIR}/hasp_config.sh"
+# shellcheck disable=SC1091
+source "${__HASP_LIB_DIR}/hasp_user.sh"
+# shellcheck disable=SC1091
+source "${__HASP_LIB_DIR}/hasp_versions.sh"
+
+if [[ ! -d  ${MINECRAFT_DIR} ]]; then
+  bashio::log.yellow "Creating Minecraft Directory"
+  chmod a+x ${MINECRAFT_DIR}
+  bashio::log.yellow "Copy Default Server Config"
+  cp /default_config/server.properties ${MINECRAFT_DIR}/server.properties
+
+fi
+
+## EULA check
+EULA=$(bashio::config 'eula')
+if [[ ${EULA^^} != TRUE ]]; then
+  bashio::log.red "EULA must be set to TRUE to indicate agreement with the Minecraft End User License"
+  bashio::log.red "See https://minecraft.net/terms"
+  bashio::log.red "Current value is '${EULA}'"
+  if [ -e ${MINECRAFT_DIR}/eula.txt ]; then
+    rm ${MINECRAFT_DIR}/eula.txt
+  fi
+  exit 1
+else
+  bashio::log.green "Accepted EULA"
+  if [ ! -e ${MINECRAFT_DIR}/eula.txt ]; then
+    bashio::log.green "Create EULA"
+    echo eula=true >${MINECRAFT_DIR}/eula.txt
+  fi
+fi
+
+
+cp -r /minecraft /data
+chmod a+x "/opt/minecraft"
+
+
+hasp::config "/data/options.json" "/data/minecraft/server.properties"
+
+cd ${MINECRAFT_DIR} || exit 1
+pwd
+ls -la
+
+bashio::log.yellow "Starting Minecraft Server"
+exec java -server -Xmx3G -Dfml.queryResult=confirm -jar forge-1.7.10-10.13.4.1614-1.7.10-universal.jar nogui
+exit 1
+
